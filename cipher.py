@@ -3,17 +3,10 @@ upperList = list()
 lowerList = list()
 
 
-def inputStuff():
-    try:
-        typ = int(input("How would you like to enter the message?\n1 for manual entry(encode)\
-        \n2 for file entry(encode)\n3 for manual entry(decode)\n4 for file entry(decode)\n"))
-    except TypeError:
-        typ = 1
+def inputStuff(typ, message, shiftNum, shiftDir):
 
     if typ == 1:
-        message = input("Enter your message:\t")
         message = message.split()
-        shiftNum, shiftDir = shiftOptions()
         encode(message, shiftDir, shiftNum)
 
     elif typ == 2:
@@ -22,26 +15,18 @@ def inputStuff():
         message = rFile.readline()
         rFile.close()
         message = message.split()
-        shiftNum, shiftDir = shiftOptions()
         encode(message, shiftDir, shiftNum)
 
     elif typ == 3:
-        message = input("Enter your message:\t")
         message = message.split()
-        shiftNum, shiftDir = shiftOptions()
-        cipher.decode(message, shiftDir, shiftNum)
+        decode(message, shiftDir, shiftNum)
 
     elif typ == 4:
         path = input("Please copy and paste the path to the file into the console.")
         rFile = open(path, "r")
         message = rFile.readline()
         rFile.close()
-        message = message.split()
-        shiftNum, shiftDir = shiftOptions()
         decode(message, shiftDir, shiftNum)
-
-    else:
-        print("Not a valid input")
 
 
 # Make list of uppercase characters
@@ -54,17 +39,6 @@ def generateUppercase():
 def generateLowercase():
     for lower in range(26):
         lowerList.append(chr(lower + 97))
-
-
-def shiftOptions():
-    try:
-        shiftNum = int(input("How much shift?\t"))
-    except:
-        shiftNum = 0
-
-    shiftDir = input("In what direction? (L/R)\t")
-    return shiftNum, shiftDir
-
 
 # Main cipher goes here
 def encode(message, shiftDir, shiftNum):
