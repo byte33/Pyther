@@ -3,13 +3,13 @@ from tkinter import *
 from tkinter import messagebox
 
 print("Hello and welcome to byte33's cipher program")
-print("02/06/19 V0.6\n")
+print("02/06/19 V0.8\n")
 
 options = ["Manual Entry (Encode)", "File Entry (Encode)", "Manual Entry (Decode)", "File Entry (Decode)"]
 
 
 def callback():
-    if messagebox.askokcancel("Quit", "Do you really wanna quit?"):
+    if messagebox.askokcancel("Don't leave me :c", "Do you really wanna go?"):
         root.destroy()
 
 
@@ -17,6 +17,7 @@ def types():
     direc = direction()
     shift = numShift.get()
     message = messageEntry.get()
+    fileName = fileInput.get()
 
     if variable.get() == "Manual Entry (Encode)":
         whatToDo = 1
@@ -29,7 +30,7 @@ def types():
 
     cipher.generateUppercase()
     cipher.generateLowercase()
-    cipher.inputStuff(whatToDo, message, int(shift), direc)
+    saveToFile(cipher.inputStuff(whatToDo, message, int(shift), direc, fileName))
 
 
 def direction():
@@ -39,6 +40,22 @@ def direction():
         return "R"
 
 
+def saveToFile(message1):
+    i = messagebox.askyesno(title="Success!", message="Message has been successfully encoded/decoded. Store to file?")
+    if i:
+        try:
+            stfName = "encodedmessage"
+            stfFile = open(stfName + ".txt", "w")
+            stfFile.write(message1)
+            stfFile.close()
+            messagebox.askokcancel("Success", "Write to file successful. Enjoy.")
+        except:
+            messagebox.showerror("ERROR", "There was an error writing to file, please try again.")
+
+    else:
+        messagebox.askokcancel("sneekybeeky", message1)
+
+
 root = Tk()
 
 
@@ -46,7 +63,7 @@ root.geometry("800x600")
 root.protocol("WM_DELETE_WINDOW", callback)
 
 title = Label(root, text="byte33's cipher program", font=("Comic Sans MS", 30)).pack(pady=30)
-version = Label(root, text="02/06/19 V0.6", font=("Comic Sans MS", 10)).place(relx=0.97, rely=0.97, anchor=E)
+version = Label(root, text="02/06/19 V0.8", font=("Comic Sans MS", 10)).place(relx=0.97, rely=0.97, anchor=E)
 
 variable = StringVar(root)
 variable.set(options[0])
@@ -55,6 +72,12 @@ var = IntVar()
 
 optionBox = OptionMenu(root, variable, *options)
 optionBox.pack(pady=25)
+
+Label(root, text="If using file entry, enter full PATH below",
+      font=("Comic Sans MS", 14)).pack(pady=10)
+
+fileInput = Entry(root, width=75)
+fileInput.pack(pady=10)
 
 Label(root, text="Please enter message below:", font=("Comic Sans MS", 14)).pack(pady=10)
 
